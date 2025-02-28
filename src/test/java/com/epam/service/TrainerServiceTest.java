@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 class TrainerServiceTest {
-    private static final String entityName = "Trainer";
+    private static final String ENTITY_NAME = "Trainer";
     private TrainerService trainerService;
     private TrainerDao trainerDao;
     private TrainerStorageInitializer storageInitializer;
@@ -28,7 +28,7 @@ class TrainerServiceTest {
     }
 
     @Test
-    @DisplayName("Create " + entityName)
+    @DisplayName("Create " + ENTITY_NAME)
     void testCreateTrainer() {
         Trainer trainer = new Trainer(1L, "Leyla", "Bakhriddinova", null, null);
         when(trainerDao.save(any(Trainer.class))).thenReturn(trainer);
@@ -41,7 +41,7 @@ class TrainerServiceTest {
     }
 
     @Test
-    @DisplayName("Update " + entityName)
+    @DisplayName("Update " + ENTITY_NAME)
     void testUpdateTrainer() {
         Trainer trainer = new Trainer(1L, "Leyla", "Bakhriddinova", true, "password123");
         when(trainerDao.save(any(Trainer.class))).thenReturn(trainer);
@@ -54,7 +54,7 @@ class TrainerServiceTest {
     }
 
     @Test
-    @DisplayName("Delete " + entityName)
+    @DisplayName("Delete " + ENTITY_NAME)
     void testDeleteTrainer() {
         Trainer trainer = new Trainer(1L, "Leyla", "Bakhriddinova", true, "password123");
         when(trainerDao.findById(1L)).thenReturn(Optional.of(trainer));
@@ -65,7 +65,7 @@ class TrainerServiceTest {
     }
 
     @Test
-    @DisplayName("Get " + entityName + " by id")
+    @DisplayName("Get " + ENTITY_NAME + " by id")
     void testGetTrainerById() {
         Trainer trainer = new Trainer(1L, "Leyla", "Bakhriddinova", true, "password123");
         when(trainerDao.findById(1L)).thenReturn(Optional.of(trainer));
@@ -78,7 +78,7 @@ class TrainerServiceTest {
     }
 
     @Test
-    @DisplayName("Get all " + entityName + "s")
+    @DisplayName("Get all " + ENTITY_NAME + "s")
     void testGetAllTrainers() {
         when(trainerDao.findAll()).thenReturn(Map.of(1L, new Trainer(1L, "Leyla", "Bakhriddinova", true, "password123")));
 

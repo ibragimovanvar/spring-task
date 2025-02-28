@@ -10,7 +10,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Configuration
 public class TraineeStorageInitializer {
@@ -24,7 +23,7 @@ public class TraineeStorageInitializer {
            return reader.lines()
                     .skip(1)
                     .map(this::parseTrainee)
-                    .collect(Collectors.toList());
+                    .toList();
         } catch (Exception e) {
             throw new RuntimeException("Failed to load trainees from CSV", e);
         }

@@ -2,9 +2,7 @@ package com.epam.service;
 
 import com.epam.config.storage.TrainerStorageInitializer;
 import com.epam.dao.TrainerDao;
-import com.epam.domain.Trainee;
 import com.epam.domain.Trainer;
-import com.epam.exceptions.DomainException;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,14 +16,14 @@ import java.util.Random;
 
 @Service("trainerService")
 public class TrainerService {
-    private static final Logger logger = LoggerFactory.getLogger(TrainerService.class);
-    private static final String entityName = "Trainer";
+    private static final Logger LOGGER = LoggerFactory.getLogger(TrainerService.class);
+    private static final String ENTITY_NAME = "Trainer";
     private final TrainerDao trainerDao;
     private final TrainerStorageInitializer storageInitializer;
 
     @Autowired
     public TrainerService(TrainerDao trainerDao, TrainerStorageInitializer storageInitializer) {
-        logger.info("{}Service Bean intialized", entityName);
+        LOGGER.info("{}Service Bean intialized", ENTITY_NAME);
 
         this.trainerDao = trainerDao;
         this.storageInitializer = storageInitializer;
@@ -40,7 +38,7 @@ public class TrainerService {
     }
 
     public Trainer createTrainer(Trainer trainer) {
-        logger.info("Request to create {} with data: {}", entityName, trainer);
+        LOGGER.info("Request to create {} with data: {}", ENTITY_NAME, trainer);
 
         trainer.setUsername(generateUsername(trainer.getFirstName(), trainer.getLastName()));
         trainer.setPassword(generatePassword());
@@ -48,32 +46,32 @@ public class TrainerService {
     }
 
     public Trainer updateTrainer(Trainer trainer) {
-        logger.info("Request to update {} with data: {}", entityName, trainer);
+        LOGGER.info("Request to update {} with data: {}", ENTITY_NAME, trainer);
 
         return trainerDao.save(trainer);
     }
 
     public void deleteTrainer(Long id) {
-        logger.info("Request to delete {} with id: {}", entityName, id);
+        LOGGER.info("Request to delete {} with id: {}", ENTITY_NAME, id);
 
         trainerDao.delete(id);
     }
 
     public Trainer getTrainer(Long id) {
-        logger.info("Request to get {} with id: {}", entityName, id);
+        LOGGER.info("Request to get {} with id: {}", ENTITY_NAME, id);
 
         Optional<Trainer> optionalTrainer = trainerDao.findById(id);
         if (optionalTrainer.isPresent()) {
             return optionalTrainer.get();
         } else {
-            logger.info("Not found {} with id {}", entityName, id);
+            LOGGER.info("Not found {} with id {}", ENTITY_NAME, id);
         }
 
         return null;
     }
 
     public Map<Long, Trainer> getTrainers() {
-        logger.info("Request to get all {}", entityName);
+        LOGGER.info("Request to get all {}", ENTITY_NAME);
 
         return trainerDao.findAll();
     }
@@ -87,7 +85,7 @@ public class TrainerService {
             username = baseUsername + suffix++;
         }
 
-        logger.info("Generated username: " + username);
+        LOGGER.info("Generated username: " + username);
 
         return username;
     }
@@ -100,7 +98,7 @@ public class TrainerService {
             sb.append(chars.charAt(random.nextInt(chars.length())));
         }
 
-        logger.info("Generated password: {}", sb);
+        LOGGER.info("Generated password: {}", sb);
 
         return sb.toString();
     }

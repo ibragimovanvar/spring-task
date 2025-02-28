@@ -25,6 +25,7 @@ public class ApplicationRunner {
 
     public static void main(String[] args) {
 
+        System.setProperty("spring.profiles.active", "prod"); // or "prod"
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext("com.epam");
         logger.info(Arrays.toString(applicationContext.getBeanDefinitionNames()));
 

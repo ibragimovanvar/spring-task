@@ -16,14 +16,14 @@ import java.util.Random;
 
 @Service("traineeService")
 public class TraineeService {
-    private static final String entityName = "Trainee";
-    private static final Logger logger = LoggerFactory.getLogger(TraineeService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TraineeService.class);
+    private static final String ENTITY_NAME = "Trainee";
     private final TraineeDao traineeDao;
     private final TraineeStorageInitializer storageInitializer;
 
     @Autowired
     public TraineeService(TraineeDao traineeDao, TraineeStorageInitializer storageInitializer) {
-        logger.info("{}Service Bean intialized", entityName);
+        LOGGER.info("{}Service Bean intialized", ENTITY_NAME);
 
         this.traineeDao = traineeDao;
         this.storageInitializer = storageInitializer;
@@ -38,7 +38,7 @@ public class TraineeService {
     }
 
     public Trainee createTrainee(Trainee trainee) {
-        logger.info("Request to create {} with data: {}", entityName, trainee);
+        LOGGER.info("Request to create {} with data: {}", ENTITY_NAME, trainee);
 
         trainee.setUsername(generateUsername(trainee.getFirstName(), trainee.getLastName()));
         trainee.setPassword(generatePassword());
@@ -46,32 +46,32 @@ public class TraineeService {
     }
 
     public Trainee updateTrainee(Trainee trainee) {
-        logger.info("Request to update {} with data: {}", entityName, trainee);
+        LOGGER.info("Request to update {} with data: {}", ENTITY_NAME, trainee);
 
         return traineeDao.save(trainee);
     }
 
     public void deleteTrainee(Long id) {
-        logger.info("Request to delete {} with id: {}", entityName, id);
+        LOGGER.info("Request to delete {} with id: {}", ENTITY_NAME, id);
 
         traineeDao.delete(getTrainee(id).getId());
     }
 
     public Trainee getTrainee(Long id) {
-        logger.info("Request to get {} with id: {}", entityName, id);
+        LOGGER.info("Request to get {} with id: {}", ENTITY_NAME, id);
 
         Optional<Trainee> optionalTrainer = traineeDao.findById(id);
         if (optionalTrainer.isPresent()) {
             return optionalTrainer.get();
         } else {
-           logger.info("Not found {} with id {}", entityName, id);
+            LOGGER.info("Not found {} with id {}", ENTITY_NAME, id);
         }
 
         return null;
     }
 
     public Map<Long, Trainee> getTrainees() {
-        logger.info("Request to get all {}", entityName);
+        LOGGER.info("Request to get all {}", ENTITY_NAME);
 
         return traineeDao.findAll();
     }
@@ -85,7 +85,7 @@ public class TraineeService {
             username = baseUsername + suffix++;
         }
 
-        logger.info("Generated username: " + username);
+        LOGGER.info("Generated username: " + username);
 
         return username;
     }
@@ -98,7 +98,7 @@ public class TraineeService {
             sb.append(chars.charAt(random.nextInt(chars.length())));
         }
 
-        logger.info("Generated password: {}", sb);
+        LOGGER.info("Generated password: {}", sb);
 
         return sb.toString();
     }

@@ -9,7 +9,6 @@ import com.epam.domain.TrainingType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -19,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class TrainingServiceTest {
-    private static final String entityName = "Training";
+    private static final String ENTITY_NAME = "Training";
     private TrainingService trainingService;
     private TrainingDao trainingDao;
     private TraineeService traineeService;
@@ -36,7 +35,7 @@ class TrainingServiceTest {
     }
 
     @Test
-    @DisplayName("Create " + entityName)
+    @DisplayName("Create " + ENTITY_NAME)
     void testCreateTraining() {
         Trainee trainee = new Trainee(1L, "Anvar", "Ibragimov", "anvar_ibragimov", "pass123", true, null, "123 Street");
         Trainer trainer = new Trainer(2L, "Leyla", "Bakhriddinova", true, "pass123");
@@ -54,7 +53,7 @@ class TrainingServiceTest {
     }
 
     @Test
-    @DisplayName("Update " + entityName)
+    @DisplayName("Update " + ENTITY_NAME)
     void testUpdateTraining() {
         Training training = new Training(3L);
         training.setTrainingName("Updated Backend");
@@ -69,14 +68,14 @@ class TrainingServiceTest {
     }
 
     @Test
-    @DisplayName("Delete " + entityName)
+    @DisplayName("Delete " + ENTITY_NAME)
     void testDeleteTraining() {
         trainingService.deleteTraining(3L);
         verify(trainingDao, times(1)).delete(3L);
     }
 
     @Test
-    @DisplayName("Get " + entityName + " by id")
+    @DisplayName("Get " + ENTITY_NAME + " by id")
     void testGetTrainingById() {
         Training training = new Training(3L);
         training.setTrainingName("Java Training");
@@ -91,7 +90,7 @@ class TrainingServiceTest {
     }
 
     @Test
-    @DisplayName("Get all " + entityName + "s")
+    @DisplayName("Get all " + ENTITY_NAME + "s")
     void testGetAllTrainings() {
         when(trainingDao.findAll()).thenReturn(Map.of(1L, new Training(1L), 2L, new Training(2L), 3L, new Training(3L)));
 

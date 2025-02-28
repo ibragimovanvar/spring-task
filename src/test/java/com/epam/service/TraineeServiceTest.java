@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 class TraineeServiceTest {
-    private static final String entityName = "Trainee";
+    private static final String ENTITY_NAME = "Trainee";
     private TraineeService traineeService;
     private TraineeDao traineeDao;
     private TraineeStorageInitializer storageInitializer;
@@ -29,7 +29,7 @@ class TraineeServiceTest {
     }
 
     @Test
-    @DisplayName("Create " + entityName)
+    @DisplayName("Create " + ENTITY_NAME)
     void testCreateTrainee() {
         Trainee trainee = new Trainee(1L, "Anvar", "Ibragimov", null, null, true, LocalDate.of(1990, 1, 1), "123 Street");
         when(traineeDao.save(any(Trainee.class))).thenReturn(trainee);
@@ -42,7 +42,7 @@ class TraineeServiceTest {
     }
 
     @Test
-    @DisplayName("Update " + entityName)
+    @DisplayName("Update " + ENTITY_NAME)
     void testUpdateTrainee() {
         Trainee trainee = new Trainee(1L, "Anvar", "Ibragimov", null, null, true, LocalDate.of(1990, 1, 1), "123 Street");
         when(traineeDao.save(any(Trainee.class))).thenReturn(trainee);
@@ -55,7 +55,7 @@ class TraineeServiceTest {
     }
 
     @Test
-    @DisplayName("Delete " + entityName)
+    @DisplayName("Delete " + ENTITY_NAME)
     void testDeleteTrainee() {
         Trainee trainee = new Trainee(1L, "Anvar", "Ibragimov", null, null, true, LocalDate.of(1990, 1, 1), "123 Street");
         when(traineeDao.findById(1L)).thenReturn(Optional.of(trainee));
@@ -66,7 +66,7 @@ class TraineeServiceTest {
     }
 
     @Test
-    @DisplayName("Get " + entityName + " by id")
+    @DisplayName("Get " + ENTITY_NAME + " by id")
     void testGetTraineeById() {
         Trainee trainee = new Trainee(1L, "Anvar", "Ibragimov", null, null, true, LocalDate.of(1990, 1, 1), "123 Street");
         when(traineeDao.findById(1L)).thenReturn(Optional.of(trainee));
@@ -79,7 +79,7 @@ class TraineeServiceTest {
     }
 
     @Test
-    @DisplayName("Get all " + entityName + "s")
+    @DisplayName("Get all " + ENTITY_NAME + "s")
     void testGetAllTrainees() {
         when(traineeDao.findAll()).thenReturn(Map.of(1L, new Trainee(1L, "Anvar", "Ibragimov", null, null, true, LocalDate.of(1990, 1, 1), "123 Street")));
 

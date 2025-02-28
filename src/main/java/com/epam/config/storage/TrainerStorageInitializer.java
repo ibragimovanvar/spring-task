@@ -1,6 +1,5 @@
 package com.epam.config.storage;
 
-import com.epam.domain.Trainee;
 import com.epam.domain.Trainer;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,9 +8,7 @@ import org.springframework.core.io.Resource;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Configuration
 public class TrainerStorageInitializer {
@@ -25,7 +22,7 @@ public class TrainerStorageInitializer {
            return reader.lines()
                     .skip(1)
                     .map(this::parseTrainer)
-                    .collect(Collectors.toList());
+                    .toList();
         } catch (Exception e) {
             throw new RuntimeException("Failed to load trainees from CSV", e);
         }

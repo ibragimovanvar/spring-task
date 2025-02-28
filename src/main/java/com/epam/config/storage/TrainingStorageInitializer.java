@@ -11,10 +11,8 @@ import org.springframework.core.io.Resource;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Configuration
 public class TrainingStorageInitializer {
@@ -28,7 +26,7 @@ public class TrainingStorageInitializer {
            return reader.lines()
                     .skip(1)
                     .map(this::parseTraining)
-                    .collect(Collectors.toList());
+                    .toList();
         } catch (Exception e) {
             throw new RuntimeException("Failed to load trainees from CSV", e);
         }
