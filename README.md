@@ -13,7 +13,7 @@ The project provides basic CRUD operations for managing **Trainees, Trainers, an
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Java 17+
+- JDK 17+
 - Maven 3.x
 
 ### Clone the Repository
