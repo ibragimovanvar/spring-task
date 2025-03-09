@@ -1,22 +1,39 @@
 package com.epam.domain;
 
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "trainees")
 public class Trainee extends User {
+
+    @Column(name = "birth_date")
     private LocalDate birthDate;
+
+    @Column(name = "address")
     private String address;
 
-    public Trainee(Long id, String firstName, String lastName, String username, String password, Boolean active, LocalDate birthDate, String address) {
-        super(id, firstName, lastName, username, password, active);
+    @ManyToMany
+    private List<Trainer> trainers;
+
+    @OneToMany(mappedBy = "trainee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Training> trainings;
+
+    public Trainee(String firstName, String lastName, String username, String password, Boolean active, LocalDate birthDate, String address) {
+        super(firstName, lastName, username, password, active);
         this.birthDate = birthDate;
         this.address = address;
     }
 
-    public Trainee(Long id, String firstName, String lastName, Boolean active, LocalDate birthDate, String address) {
-        super(id, firstName, lastName, active);
+    public Trainee(String firstName, String lastName, Boolean active, LocalDate birthDate, String address) {
+        super(firstName, lastName, active);
         this.birthDate = birthDate;
         this.address = address;
     }

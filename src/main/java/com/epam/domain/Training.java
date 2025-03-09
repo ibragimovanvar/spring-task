@@ -1,34 +1,42 @@
 package com.epam.domain;
 
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "trainings")
 public class Training {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @ManyToOne
+    @JoinColumn(name = "trainer_id", nullable = false)
     private Trainer trainer;
+    @ManyToOne
+    @JoinColumn(name = "trainee_id", nullable = false)
     private Trainee trainee;
-    private String trainingName;
-    private TrainingType trainingType;
-    private LocalDateTime trainingDateTime;
-    private Integer trainingDurationInHours;
 
-    public Training() {
-    }
+    @Column(name = "training_name", nullable = false)
+    private String trainingName;
+
+    @ManyToOne
+    private TrainingType trainingType;
+
+    @Column(name = "training_date_time", nullable = false)
+    private LocalDateTime trainingDateTime;
+
+    @Column(name = "training_duration_in_hours", nullable = false)
+    private Integer trainingDurationInHours;
 
     public Training(Long id) {
         this.id = id;
-    }
-
-    public Training(Long id, Trainer trainer, Trainee trainee, String trainingName, TrainingType trainingType, LocalDateTime trainingDateTime, Integer trainingDurationInHours) {
-        this.id = id;
-        this.trainer = trainer;
-        this.trainee = trainee;
-        this.trainingName = trainingName;
-        this.trainingType = trainingType;
-        this.trainingDateTime = trainingDateTime;
-        this.trainingDurationInHours = trainingDurationInHours;
     }
 
     public Training(Trainer trainer, Trainee trainee, String trainingName, TrainingType trainingType, LocalDateTime trainingDateTime, int trainingDurationInHours) {

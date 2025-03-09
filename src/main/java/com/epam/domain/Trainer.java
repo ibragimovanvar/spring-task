@@ -1,30 +1,37 @@
 package com.epam.domain;
 
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
+import jakarta.persistence.*;
+import lombok.*;
 
-import java.util.Objects;
-@Data
+import java.util.List;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "trainers")
 public class Trainer extends User {
+    @ManyToOne
+    private TrainingType specialization;
 
-    private String specialization;
+    @ManyToOne
+    private Trainee trainee;
 
-    public Trainer(Long id, String firstName, String lastName, String username, String password, Boolean active, String specialization) {
-        super(id, firstName, lastName, username, password, active);
+    @OneToMany(mappedBy = "trainer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Training> trainings;
+
+    public Trainer(String firstName, String lastName, String username, String password, Boolean active, TrainingType specialization) {
+        super(firstName, lastName, username, password, active);
         this.specialization = specialization;
     }
 
-    public Trainer(Long id, String firstName, String lastName, Boolean active, String specialization) {
-        super(id, firstName, lastName, active);
+    public Trainer(String firstName, String lastName, Boolean active, TrainingType specialization) {
+        super(firstName, lastName, active);
         this.specialization = specialization;
-
     }
 
     public Trainer(Long id) {
         super(id);
-    }
-
-    public Trainer() {
     }
 }

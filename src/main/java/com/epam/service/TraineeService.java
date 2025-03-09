@@ -7,13 +7,17 @@ import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
+@Transactional
 @Service("traineeService")
 public class TraineeService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TraineeService.class);
@@ -29,12 +33,12 @@ public class TraineeService {
         this.storageInitializer = storageInitializer;
     }
 
-    @PostConstruct
-    private void initTrainee() {
+    @Order(1)
+    @EventListener(ContextRefreshedEvent.class)
+    public void initTrainee() {
+        LOGGER.info("Saving CSVs to entity: {}", ENTITY_NAME);
         List<Trainee> traineeList = storageInitializer.initStorage();
-
-        traineeList
-                .forEach(this::createTrainee);
+        traineeList.forEach(this::createTrainee);
     }
 
     public Trainee createTrainee(Trainee trainee) {
@@ -70,7 +74,7 @@ public class TraineeService {
         return null;
     }
 
-    public Map<Long, Trainee> getTrainees() {
+    public List<Trainee> getTrainees() {
         LOGGER.info("Request to get all {}", ENTITY_NAME);
 
         return traineeDao.findAll();

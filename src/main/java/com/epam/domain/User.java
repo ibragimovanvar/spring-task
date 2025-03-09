@@ -1,18 +1,36 @@
 package com.epam.domain;
 
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Data
-public class User {
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@MappedSuperclass
+public abstract class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "first_name", nullable = false, length = 16)
     private String firstName;
+
+    @Column(name = "last_name", nullable = false, length = 16)
     private String lastName;
+
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
+
+    @Column(name = "password", nullable = false, length = 24)
     private String password;
+
+    @Column(name = "active", nullable = false)
     private Boolean active;
 
-    public User(Long id, String firstName, String lastName, String username, String password, Boolean active) {
-        this.id = id;
+    public User(String firstName, String lastName, String username, String password, Boolean active) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -20,8 +38,7 @@ public class User {
         this.active = active;
     }
 
-    public User(Long id, String firstName, String lastName, Boolean active) {
-        this.id = id;
+    public User(String firstName, String lastName, Boolean active) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.active = active;
@@ -29,8 +46,5 @@ public class User {
 
     public User(Long id) {
         this.id = id;
-    }
-
-    public User() {
     }
 }

@@ -1,6 +1,7 @@
 package com.epam.dao;
 
 import com.epam.domain.Training;
+import com.epam.domain.TrainingType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -11,12 +12,12 @@ import java.util.Optional;
 
 @Repository
 @Transactional
-public class TrainingDao {
+public class TrainingTypeDao {
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    public Training save(Training training) {
+    public TrainingType save(TrainingType training) {
         if (training.getId() == null) {
             entityManager.persist(training);  // Save new training
             return training;
@@ -25,19 +26,19 @@ public class TrainingDao {
         }
     }
 
-    public Optional<Training> findById(Long id) {
-        return Optional.ofNullable(entityManager.find(Training.class, id));
+    public Optional<TrainingType> findById(Long id) {
+        return Optional.ofNullable(entityManager.find(TrainingType.class, id));
     }
 
     public void delete(Long id) {
-        Training training = entityManager.find(Training.class, id);
+        TrainingType training = entityManager.find(TrainingType.class, id);
         if (training != null) {
             entityManager.remove(training);
         }
     }
 
-    public List<Training> findAll() {
-        return entityManager.createQuery("SELECT t FROM Training t", Training.class)
+    public List<TrainingType> findAll() {
+        return entityManager.createQuery("SELECT t FROM TrainingType t", TrainingType.class)
                 .getResultList();
     }
 }

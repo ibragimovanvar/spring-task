@@ -15,15 +15,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Configuration
-public class TrainingStorageInitializer {
+public class TrainingTypeStorageInitializer {
 
-    @Value("classpath:storage/training.csv") // Corrected property value
+    @Value("classpath:storage/training_type.csv") // Corrected property value
     private Resource trainingResource;
 
-    @PostConstruct
-    public List<Training> initStorage() {
+    public List<TrainingType> initStorage() {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(trainingResource.getInputStream()))) {
-           return reader.lines()
+            return reader.lines()
                     .skip(1)
                     .map(this::parseTraining)
                     .toList();
@@ -32,8 +31,8 @@ public class TrainingStorageInitializer {
         }
     }
 
-    private Training parseTraining(String line) {
+    private TrainingType parseTraining(String line) {
         String[] parts = line.split(",");
-        return new Training(Long.valueOf(parts[0].trim()),new Trainer(Long.valueOf(parts[1].trim())), new Trainee(Long.valueOf(parts[2].trim())), parts[3].trim(), new TrainingType(Long.valueOf(parts[4].trim())), LocalDateTime.parse(parts[5].trim()), Integer.valueOf(parts[6].trim()));
+        return new TrainingType(Long.valueOf(parts[0].trim()), parts[1].trim());
     }
 }

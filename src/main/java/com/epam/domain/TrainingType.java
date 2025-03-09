@@ -1,12 +1,24 @@
 package com.epam.domain;
 
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "training_types")
 public class TrainingType {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "training_type_name")
     private String trainingTypeName;
 
-    public TrainingType(String trainingTypeName) {
-        this.trainingTypeName = trainingTypeName;
+    public TrainingType(Long id) {
+        this.id = id;
     }
 }

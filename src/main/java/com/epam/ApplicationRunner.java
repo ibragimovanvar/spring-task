@@ -25,7 +25,7 @@ public class ApplicationRunner {
 
     public static void main(String[] args) {
 
-        System.setProperty("spring.profiles.active", "prod"); // or "prod"
+        System.setProperty("spring.profiles.active", "prod");
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext("com.epam");
         logger.info(Arrays.toString(applicationContext.getBeanDefinitionNames()));
 
@@ -34,25 +34,5 @@ public class ApplicationRunner {
         TrainingService trainingService = (TrainingService) applicationContext.getBean("trainingService");
         TrainingFacade trainingFacade = (TrainingFacade) applicationContext.getBean("trainingFacade");
 
-        logger.info("Trainees: {}", traineeService.getTrainees());
-        logger.info("Trainers: {}", trainerService.getTrainers());
-        logger.info("Trainings: {}", trainingService.getTrainings());
-
-        logger.info("Trainees size: {}", traineeService.getTrainees().size());
-        logger.info("Trainers size: {}", trainerService.getTrainers().size());
-        logger.info("Trainings size: {}", trainingService.getTrainings().size());
-
-
-        Trainee trainee = new Trainee(null, "Anvar", "Ibragimov", true, LocalDate.now(), "Yunusobod");
-        Trainer trainer = new Trainer(null, "Sirojiddin", "Saidov", true, "Java Backend");
-        Training training = new Training(trainer, trainee, "Java Backend Middle+", new TrainingType("Internship"), LocalDateTime.now(), 50);
-
-        trainingFacade.createTraineeProfile(trainee);
-        trainingFacade.createTrainerProfile(trainer);
-        trainingFacade.createTraining(training);
-
-        logger.info("Trainees size: {}", traineeService.getTrainees().size());
-        logger.info("Trainers size: {}", trainerService.getTrainers().size());
-        logger.info("Trainings size: {}", trainingService.getTrainings().size());
     }
 }

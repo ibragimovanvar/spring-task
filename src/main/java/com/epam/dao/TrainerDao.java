@@ -1,41 +1,50 @@
 package com.epam.dao;
 
-import com.epam.domain.Trainee;
 import com.epam.domain.Trainer;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
+@Transactional
 public class TrainerDao {
-    private final Map<Long, Trainer> storage = new ConcurrentHashMap<>();
 
-    public Trainer save(Trainer trainee) {
-        Long id = (long) storage.size() + 1;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-        if (trainee.getId() == null) {
-            trainee.setId(id);
+    public Trainer save(Trainer trainer) {
+        if (trainer.getId() == null) {
+            entityManager.persist(trainer);  // Save new trainer
+            return trainer;
+        } else {
+            return entityManager.merge(trainer);  // Update existing trainer
         }
-        storage.put(trainee.getId(), trainee);
-        return trainee;
     }
 
     public Optional<Trainer> findById(Long id) {
-        return Optional.ofNullable(storage.get(id));
+        return Optional.ofNullable(entityManager.find(Trainer.class, id));
     }
 
     public void delete(Long id) {
-        storage.remove(id);
+        Trainer trainer = entityManager.find(Trainer.class, id);
+        if (trainer != null) {
+            entityManager.remove(trainer);
+        }
     }
 
-    public Map<Long, Trainer> findAll() {
-        return new ConcurrentHashMap<>(storage);
+    public List<Trainer> findAll() {
+        return entityManager.createQuery("SELECT t FROM Trainer t", Trainer.class)
+                .getResultList();
     }
 
-    public boolean existsByUsername(String username){
-        return findAll().values().stream().anyMatch(t -> t.getUsername().equals(username));
+    public boolean existsByUsername(String username) {
+        Long count = entityManager.createQuery("SELECT COUNT(t) FROM Trainer t WHERE t.username = :username", Long.class)
+                .setParameter("username", username)
+                .getSingleResult();
+        return count > 0;
     }
 }

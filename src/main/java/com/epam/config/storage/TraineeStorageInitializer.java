@@ -31,6 +31,6 @@ public class TraineeStorageInitializer {
 
     private Trainee parseTrainee(String line) {
         String[] parts = line.split(",");
-        return new Trainee(Long.valueOf(parts[0].trim()),parts[1].trim(), parts[2].trim(), Boolean.valueOf(parts[3].trim()), LocalDate.parse(parts[4].trim()), parts[5].trim());
+        return new Trainee(parts[1].trim(), parts[2].trim(), Boolean.valueOf(parts[3].trim()), LocalDate.parse(parts[4].trim()), parts[5].trim());
     }
 }

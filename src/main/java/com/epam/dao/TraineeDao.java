@@ -1,41 +1,50 @@
 package com.epam.dao;
 
 import com.epam.domain.Trainee;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
+@Transactional
 public class TraineeDao {
-    private final Map<Long, Trainee> storage = new ConcurrentHashMap<>();
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public Trainee save(Trainee trainee) {
-        Long id = (long) storage.size() + 1;
-
         if (trainee.getId() == null) {
-            trainee.setId(id);
+            entityManager.persist(trainee);
+            return trainee;
+        } else {
+            return entityManager.merge(trainee);
         }
-
-        storage.put(trainee.getId(), trainee);
-        return trainee;
     }
 
     public Optional<Trainee> findById(Long id) {
-        return Optional.ofNullable(storage.get(id));
+        return Optional.ofNullable(entityManager.find(Trainee.class, id));
     }
 
     public void delete(Long id) {
-        storage.remove(id);
+        Trainee trainee = entityManager.find(Trainee.class, id);
+        if (trainee != null) {
+            entityManager.remove(trainee);
+        }
     }
 
-    public Map<Long, Trainee> findAll() {
-        return new ConcurrentHashMap<>(storage);
+    public List<Trainee> findAll() {
+        return entityManager.createQuery("SELECT t FROM Trainee t", Trainee.class)
+                .getResultList();
     }
 
-    public boolean existsByUsername(String username){
-        return findAll().values().stream().anyMatch(t -> t.getUsername().equals(username));
+    public boolean existsByUsername(String username) {
+        Long count = entityManager.createQuery("SELECT COUNT(t) FROM Trainee t WHERE t.username = :username", Long.class)
+                .setParameter("username", username)
+                .getSingleResult();
+        return count > 0;
     }
 }
