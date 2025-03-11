@@ -23,7 +23,7 @@ public class Trainee extends User {
     @ManyToMany
     private List<Trainer> trainers;
 
-    @OneToMany(mappedBy = "trainee", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "trainee", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Training> trainings;
 
     public Trainee(String firstName, String lastName, String username, String password, Boolean active, LocalDate birthDate, String address) {

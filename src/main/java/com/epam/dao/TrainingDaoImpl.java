@@ -1,5 +1,6 @@
 package com.epam.dao;
 
+import com.epam.dao.interfaces.TrainingDao;
 import com.epam.domain.Training;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -11,31 +12,37 @@ import java.util.Optional;
 
 @Repository
 @Transactional
-public class TrainingDao {
+public class TrainingDaoImpl implements TrainingDao {
 
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Override
     public Training save(Training training) {
         if (training.getId() == null) {
-            entityManager.persist(training);  // Save new training
-            return training;
+            entityManager.persist(training); // New entity
         } else {
-            return entityManager.merge(training);  // Update existing training
+            training = entityManager.merge(training); // Existing detached entity
         }
+        return training;
     }
 
+    @Override
     public Optional<Training> findById(Long id) {
         return Optional.ofNullable(entityManager.find(Training.class, id));
     }
 
-    public void delete(Long id) {
-        Training training = entityManager.find(Training.class, id);
-        if (training != null) {
-            entityManager.remove(training);
-        }
+    @Override
+    public void update(Training training) {
+        entityManager.merge(training);
     }
 
+    @Override
+    public void delete(Training training) {
+        entityManager.remove(entityManager.contains(training) ? training : entityManager.merge(training));
+    }
+
+    @Override
     public List<Training> findAll() {
         return entityManager.createQuery("SELECT t FROM Training t", Training.class)
                 .getResultList();

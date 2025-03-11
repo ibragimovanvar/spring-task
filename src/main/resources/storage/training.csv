@@ -9,5 +9,3 @@ id,trainer_id,trainee_id,training_name,training_type,training_date_time,training
 8,3,3,Cybersecurity Basics,1,2024-02-29T18:00:00,32
 9,4,4,Microservices Architecture,2,2024-03-01T08:30:00,44
 10,5,5,Cloud Computing,3,2024-03-02T12:45:00,25
-11,13,4,Microservices Architecture,4,2024-03-01T08:30:00,40
-12,5,43,Cloud Computing,1,2024-03-02T12:45:00,22

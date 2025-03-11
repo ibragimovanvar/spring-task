@@ -18,7 +18,7 @@ public class Trainer extends User {
     @ManyToOne
     private Trainee trainee;
 
-    @OneToMany(mappedBy = "trainer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "trainer", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Training> trainings;
 
     public Trainer(String firstName, String lastName, String username, String password, Boolean active, TrainingType specialization) {

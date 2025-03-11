@@ -1,14 +1,10 @@
 package com.epam.service;
 
 import com.epam.config.storage.TrainerStorageInitializer;
-import com.epam.dao.TrainerDao;
-import com.epam.domain.Trainer;
+import com.epam.dao.TrainerDaoImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.Map;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -16,15 +12,15 @@ import static org.mockito.Mockito.*;
 
 class TrainerServiceTest {
     private static final String ENTITY_NAME = "Trainer";
-    private TrainerService trainerService;
-    private TrainerDao trainerDao;
+    private TrainerServiceImpl trainerService;
+    private TrainerDaoImpl trainerDao;
     private TrainerStorageInitializer storageInitializer;
 
     @BeforeEach
     void setUp() {
-        trainerDao = mock(TrainerDao.class);
+        trainerDao = mock(TrainerDaoImpl.class);
         storageInitializer = mock(TrainerStorageInitializer.class);
-        trainerService = new TrainerService(trainerDao, storageInitializer);
+        trainerService = new TrainerServiceImpl(trainerDao, storageInitializer);
     }
 
     @Test
