@@ -6,6 +6,7 @@ import com.epam.dao.interfaces.TrainerDao;
 import com.epam.domain.Trainer;
 import com.epam.domain.Training;
 import com.epam.domain.TrainingType;
+import com.epam.domain.User;
 import com.epam.service.interfaces.TrainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,15 +51,16 @@ public class TrainerServiceImpl implements TrainerService {
                 ENTITY_NAME, firstName, lastName, specialization.getTrainingTypeName());
 
         validateRequiredFields(firstName, lastName, specialization);
-        Trainer trainer = new Trainer(firstName, lastName, true, specialization);
-        trainer.setUsername(generateUsername(firstName, lastName));
-        trainer.setPassword(generatePassword());
+        Trainer trainer = new Trainer(new User(firstName, lastName, true), specialization);
+        trainer.getUser().setUsername(generateUsername(firstName, lastName));
+        trainer.getUser().setPassword(generatePassword());
+
         return trainerDao.save(trainer);
     }
 
     private Trainer createTrainer(Trainer trainer) {
-        trainer.setUsername(generateUsername(trainer.getFirstName(), trainer.getLastName()));
-        trainer.setPassword(generatePassword());
+        trainer.getUser().setUsername(generateUsername(trainer.getUser().getFirstName(), trainer.getUser().getLastName()));
+        trainer.getUser().setPassword(generatePassword());
         return trainerDao.save(trainer);
     }
 
@@ -66,7 +68,7 @@ public class TrainerServiceImpl implements TrainerService {
     public boolean authenticate(String username, String password) {
         LOGGER.info("Authenticating {} with username: {}", ENTITY_NAME, username);
         return trainerDao.findByUsername(username)
-                .map(trainer -> trainer.getPassword().equals(password))
+                .map(trainer -> trainer.getUser().getPassword().equals(password))
                 .orElse(false);
     }
 
@@ -83,7 +85,7 @@ public class TrainerServiceImpl implements TrainerService {
         LOGGER.info("Request to update {} password for username: {}", ENTITY_NAME, username);
         requireAuthentication(username);
         trainerDao.findByUsername(username).ifPresent(trainer -> {
-            trainer.setPassword(newPassword);
+            trainer.getUser().setPassword(newPassword);
             trainerDao.update(trainer);
         });
     }
@@ -92,8 +94,8 @@ public class TrainerServiceImpl implements TrainerService {
     @Override
     public void updateProfile(Trainer trainer) {
         LOGGER.info("Request to update {} profile: {}", ENTITY_NAME, trainer);
-        requireAuthentication(trainer.getUsername());
-        validateRequiredFields(trainer.getFirstName(), trainer.getLastName(), trainer.getSpecialization());
+        requireAuthentication(trainer.getUser().getUsername());
+        validateRequiredFields(trainer.getUser().getFirstName(), trainer.getUser().getLastName(), trainer.getSpecialization());
         trainerDao.update(trainer);
     }
 
@@ -104,7 +106,7 @@ public class TrainerServiceImpl implements TrainerService {
                 ENTITY_NAME, isActive, username);
         requireAuthentication(username);
         trainerDao.findByUsername(username).ifPresent(trainer -> {
-            trainer.setActive(isActive);
+            trainer.getUser().setActive(isActive);
             trainerDao.update(trainer);
         });
     }

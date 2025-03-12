@@ -11,7 +11,15 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "trainers")
-public class Trainer extends User {
+public class Trainer{
+    @Id
+    @Column(name = "user_id")
+    private Long id;
+
+    @MapsId
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
     @ManyToOne
     private TrainingType specialization;
 
@@ -21,17 +29,12 @@ public class Trainer extends User {
     @OneToMany(mappedBy = "trainer", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Training> trainings;
 
-    public Trainer(String firstName, String lastName, String username, String password, Boolean active, TrainingType specialization) {
-        super(firstName, lastName, username, password, active);
-        this.specialization = specialization;
-    }
-
-    public Trainer(String firstName, String lastName, Boolean active, TrainingType specialization) {
-        super(firstName, lastName, active);
+    public Trainer(User user, TrainingType specialization) {
+        this.user = user;
         this.specialization = specialization;
     }
 
     public Trainer(Long id) {
-        super(id);
+        this.id = id;
     }
 }

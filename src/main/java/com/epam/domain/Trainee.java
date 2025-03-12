@@ -12,33 +12,37 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "trainees")
-public class Trainee extends User {
+public class Trainee {
 
+    @Id
+    @Column(name = "user_id")
+    private Long id;
+
+    @MapsId
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
     @Column(name = "address")
     private String address;
 
-    @ManyToMany
+
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Trainer> trainers;
+
 
     @OneToMany(mappedBy = "trainee", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Training> trainings;
 
-    public Trainee(String firstName, String lastName, String username, String password, Boolean active, LocalDate birthDate, String address) {
-        super(firstName, lastName, username, password, active);
-        this.birthDate = birthDate;
-        this.address = address;
-    }
-
-    public Trainee(String firstName, String lastName, Boolean active, LocalDate birthDate, String address) {
-        super(firstName, lastName, active);
+    public Trainee(User user, LocalDate birthDate, String address) {
+        this.user = user;
         this.birthDate = birthDate;
         this.address = address;
     }
 
     public Trainee(Long id) {
-        super(id);
+        this.id = id;
     }
 }

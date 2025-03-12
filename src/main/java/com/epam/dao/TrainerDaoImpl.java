@@ -4,6 +4,7 @@ import com.epam.dao.interfaces.TrainerDao;
 import com.epam.domain.Trainee;
 import com.epam.domain.Trainer;
 import com.epam.domain.Training;
+import com.epam.domain.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
@@ -24,6 +25,7 @@ public class TrainerDaoImpl implements TrainerDao {
 
     @Override
     public Trainer save(Trainer trainer) {
+        trainer.getUser().setRole("ROLE_TRAINER");
         entityManager.persist(trainer);
         return trainer;
     }
@@ -35,7 +37,7 @@ public class TrainerDaoImpl implements TrainerDao {
 
     @Override
     public Optional<Trainer> findByUsername(String username) {
-        return entityManager.createQuery("SELECT t FROM Trainer t WHERE t.username = :username", Trainer.class)
+        return entityManager.createQuery("SELECT t FROM Trainer t WHERE t.user.username = :username", Trainer.class)
                 .setParameter("username", username)
                 .getResultStream()
                 .findFirst();
@@ -59,7 +61,7 @@ public class TrainerDaoImpl implements TrainerDao {
 
     @Override
     public boolean existsByUsername(String username) {
-        return entityManager.createQuery("SELECT COUNT(t) FROM Trainer t WHERE t.username = :username", Long.class)
+        return entityManager.createQuery("SELECT COUNT(t) FROM Trainer t WHERE t.user.username = :username", Long.class)
                 .setParameter("username", username)
                 .getSingleResult() > 0;
     }
@@ -70,10 +72,12 @@ public class TrainerDaoImpl implements TrainerDao {
         CriteriaQuery<Training> cq = cb.createQuery(Training.class);
         Root<Training> root = cq.from(Training.class);
         Join<Training, Trainer> trainerJoin = root.join("trainer");
+        Join<Trainer, User> trainerUserJoin = trainerJoin.join("user"); // Join to User for Trainer
         Join<Training, Trainee> traineeJoin = root.join("trainee");
+        Join<Trainee, User> traineeUserJoin = traineeJoin.join("user"); // Join to User for Trainee
 
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(cb.equal(trainerJoin.get("username"), username));
+        predicates.add(cb.equal(trainerUserJoin.get("username"), username)); // Access username from User
 
         if (fromDate != null) {
             predicates.add(cb.greaterThanOrEqualTo(root.get("trainingDateTime"), fromDate));
@@ -82,7 +86,7 @@ public class TrainerDaoImpl implements TrainerDao {
             predicates.add(cb.lessThanOrEqualTo(root.get("trainingDateTime"), toDate));
         }
         if (traineeName != null && !traineeName.isEmpty()) {
-            predicates.add(cb.like(cb.lower(traineeJoin.get("firstName")), "%" + traineeName.toLowerCase() + "%"));
+            predicates.add(cb.like(cb.lower(traineeUserJoin.get("firstName")), "%" + traineeName.toLowerCase() + "%")); // Access firstName from User
         }
 
         cq.select(root).where(predicates.toArray(new Predicate[0]));

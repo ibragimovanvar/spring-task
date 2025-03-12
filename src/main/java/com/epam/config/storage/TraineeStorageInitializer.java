@@ -1,6 +1,7 @@
 package com.epam.config.storage;
 
 import com.epam.domain.Trainee;
+import com.epam.domain.User;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +32,6 @@ public class TraineeStorageInitializer {
 
     private Trainee parseTrainee(String line) {
         String[] parts = line.split(",");
-        return new Trainee(parts[1].trim(), parts[2].trim(), Boolean.valueOf(parts[3].trim()), LocalDate.parse(parts[4].trim()), parts[5].trim());
+        return new Trainee(new User(parts[1].trim(), parts[2].trim(), Boolean.valueOf(parts[3].trim())), LocalDate.parse(parts[4].trim()), parts[5].trim());
     }
 }

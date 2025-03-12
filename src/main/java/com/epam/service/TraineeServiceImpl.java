@@ -6,6 +6,7 @@ import com.epam.dao.interfaces.TraineeDao;
 import com.epam.domain.Trainee;
 import com.epam.domain.Trainer;
 import com.epam.domain.Training;
+import com.epam.domain.User;
 import com.epam.service.interfaces.TraineeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,15 +51,15 @@ public class TraineeServiceImpl implements TraineeService {
                 ENTITY_NAME, firstName, lastName, birthDate, address);
 
         validateRequiredFields(firstName, lastName, birthDate, address);
-        Trainee trainee = new Trainee(firstName, lastName, true, birthDate, address);
-        trainee.setUsername(generateUsername(firstName, lastName));
-        trainee.setPassword(generatePassword());
+        Trainee trainee = new Trainee(new User(firstName, lastName, true), birthDate, address);
+        trainee.getUser().setUsername(generateUsername(firstName, lastName));
+        trainee.getUser().setPassword(generatePassword());
         return traineeDao.save(trainee);
     }
 
     private Trainee createTrainee(Trainee trainee) {
-        trainee.setUsername(generateUsername(trainee.getFirstName(), trainee.getLastName()));
-        trainee.setPassword(generatePassword());
+        trainee.getUser().setUsername(generateUsername(trainee.getUser().getFirstName(), trainee.getUser().getLastName()));
+        trainee.getUser().setPassword(generatePassword());
         return traineeDao.save(trainee);
     }
 
@@ -66,7 +67,7 @@ public class TraineeServiceImpl implements TraineeService {
     public boolean authenticate(String username, String password) {
         LOGGER.info("Authenticating {} with username: {}", ENTITY_NAME, username);
         return traineeDao.findByUsername(username)
-                .map(trainee -> trainee.getPassword().equals(password))
+                .map(trainee -> trainee.getUser().getPassword().equals(password))
                 .orElse(false);
     }
 
@@ -82,7 +83,7 @@ public class TraineeServiceImpl implements TraineeService {
         LOGGER.info("Request to update {} password for username: {}", ENTITY_NAME, username);
         requireAuthentication(username);
         traineeDao.findByUsername(username).ifPresent(trainee -> {
-            trainee.setPassword(newPassword);
+            trainee.getUser().setPassword(newPassword);
             traineeDao.update(trainee);
         });
     }
@@ -90,8 +91,8 @@ public class TraineeServiceImpl implements TraineeService {
     @Override
     public void updateProfile(Trainee trainee) {
         LOGGER.info("Request to update {} profile: {}", ENTITY_NAME, trainee);
-        requireAuthentication(trainee.getUsername());
-        validateRequiredFields(trainee.getFirstName(), trainee.getLastName(),
+        requireAuthentication(trainee.getUser().getUsername());
+        validateRequiredFields(trainee.getUser().getFirstName(), trainee.getUser().getLastName(),
                 trainee.getBirthDate(), trainee.getAddress());
         traineeDao.update(trainee);
     }
@@ -102,7 +103,7 @@ public class TraineeServiceImpl implements TraineeService {
                 ENTITY_NAME, isActive, username);
         requireAuthentication(username);
         traineeDao.findByUsername(username).ifPresent(trainee -> {
-            trainee.setActive(isActive);
+            trainee.getUser().setActive(isActive);
             traineeDao.update(trainee);
         });
     }

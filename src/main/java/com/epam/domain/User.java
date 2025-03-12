@@ -7,8 +7,8 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@MappedSuperclass
-public abstract class User {
+@Entity(name = "app_users")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +26,9 @@ public abstract class User {
 
     @Column(name = "password", nullable = false, length = 24)
     private String password;
+
+    @Column(name = "role", nullable = false)
+    private String role;
 
     @Column(name = "active", nullable = false)
     private Boolean active;

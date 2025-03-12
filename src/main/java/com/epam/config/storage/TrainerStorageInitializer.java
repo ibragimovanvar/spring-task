@@ -2,6 +2,7 @@ package com.epam.config.storage;
 
 import com.epam.domain.Trainer;
 import com.epam.domain.TrainingType;
+import com.epam.domain.User;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +32,6 @@ public class TrainerStorageInitializer {
 
     private Trainer parseTrainer(String line) {
         String[] parts = line.split(",");
-        return new Trainer(parts[1].trim(), parts[2].trim(), Boolean.valueOf(parts[3].trim()), new TrainingType(Long.valueOf(parts[4].trim())));
+        return new Trainer(new User(parts[1].trim(), parts[2].trim(), Boolean.valueOf(parts[3].trim())), new TrainingType(Long.valueOf(parts[4].trim())));
     }
 }
