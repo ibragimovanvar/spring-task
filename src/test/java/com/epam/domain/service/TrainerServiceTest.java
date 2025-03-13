@@ -1,6 +1,5 @@
 package com.epam.domain.service;
 
-import com.epam.config.storage.TrainerStorageInitializer;
 import com.epam.dao.TrainerDao;
 import com.epam.domain.Trainer;
 import com.epam.domain.Training;
@@ -27,9 +26,6 @@ class TrainerServiceTest {
 
     @Mock
     private TrainerDao trainerDao;
-
-    @Mock
-    private TrainerStorageInitializer storageInitializer;
 
     @InjectMocks
     private TrainerServiceImpl trainerService;
@@ -132,21 +128,5 @@ class TrainerServiceTest {
 
         assertThrows(SecurityException.class, () ->
             trainerService.getTrainerTrainings("sirojiddin_saidov", null, null, null));
-    }
-
-    @Test
-    void initTrainer_ShouldSaveTrainersFromStorageInitializer() {
-        Trainer trainerFromStorage = new Trainer(new User("Leyla", "Bakhriddinovna", true), specialization);
-        List<Trainer> trainers = Collections.singletonList(trainerFromStorage);
-        when(storageInitializer.initStorage()).thenReturn(trainers);
-        when(trainerDao.existsByUsername(anyString())).thenReturn(false);
-        when(trainerDao.save(any(Trainer.class))).thenReturn(trainerFromStorage);
-
-        trainerService.initTrainer();
-
-        verify(storageInitializer).initStorage();
-        verify(trainerDao).save(any(Trainer.class));
-        assertNotNull(trainerFromStorage.getUser().getUsername());
-        assertNotNull(trainerFromStorage.getUser().getPassword());
     }
 }

@@ -1,6 +1,5 @@
 package com.epam.domain.service;
 
-import com.epam.config.storage.TrainingStorageInitializer;
 import com.epam.dao.TraineeDao;
 import com.epam.dao.TrainerDao;
 import com.epam.dao.TrainingDao;
@@ -35,9 +34,6 @@ class TrainingServiceTest {
 
     @Mock
     private TrainerDao trainerDao;
-
-    @Mock
-    private TrainingStorageInitializer trainingStorageInitializer;
 
     @InjectMocks
     private TrainingServiceImpl trainingService;

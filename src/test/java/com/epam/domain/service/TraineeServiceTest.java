@@ -1,6 +1,5 @@
 package com.epam.domain.service;
 
-import com.epam.config.storage.TraineeStorageInitializer;
 import com.epam.dao.TraineeDao;
 import com.epam.domain.Trainee;
 import com.epam.domain.Trainer;
@@ -29,9 +28,6 @@ class TraineeServiceTest {
 
     @Mock
     private TraineeDao traineeDao;
-
-    @Mock
-    private TraineeStorageInitializer storageInitializer;
 
     @Mock
     private Logger logger; // Mocking the static logger is tricky; we'll assume it's injected for simplicity
@@ -158,21 +154,5 @@ class TraineeServiceTest {
         traineeService.updateTraineeTrainers("anvar_ibragimov", trainerUsernames);
 
         verify(traineeDao).updateTraineeTrainers("anvar_ibragimov", trainerUsernames);
-    }
-
-    @Test
-    void initTrainee_ShouldSaveTraineesFromStorageInitializer() {
-        Trainee traineeFromStorage = new Trainee(new User("Leyla", "Bakhriddinovna", true), LocalDate.of(1995, 1, 1), "456 Elm St");
-        List<Trainee> trainees = Collections.singletonList(traineeFromStorage);
-        when(storageInitializer.initStorage()).thenReturn(trainees);
-        when(traineeDao.existsByUsername(anyString())).thenReturn(false);
-        when(traineeDao.save(any(Trainee.class))).thenReturn(traineeFromStorage);
-
-        traineeService.initTrainee();
-
-        verify(storageInitializer).initStorage();
-        verify(traineeDao).save(any(Trainee.class));
-        assertNotNull(traineeFromStorage.getUser().getUsername());
-        assertNotNull(traineeFromStorage.getUser().getPassword());
     }
 }
