@@ -30,7 +30,7 @@ class TraineeServiceTest {
     private TraineeDao traineeDao;
 
     @Mock
-    private Logger logger; // Mocking the static logger is tricky; we'll assume it's injected for simplicity
+    private Logger logger;
 
     @InjectMocks
     private TraineeServiceImpl traineeService;
