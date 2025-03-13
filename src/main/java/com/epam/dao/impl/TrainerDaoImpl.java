@@ -1,6 +1,6 @@
-package com.epam.dao;
+package com.epam.dao.impl;
 
-import com.epam.dao.interfaces.TrainerDao;
+import com.epam.dao.TrainerDao;
 import com.epam.domain.Trainee;
 import com.epam.domain.Trainer;
 import com.epam.domain.Training;
@@ -72,12 +72,12 @@ public class TrainerDaoImpl implements TrainerDao {
         CriteriaQuery<Training> cq = cb.createQuery(Training.class);
         Root<Training> root = cq.from(Training.class);
         Join<Training, Trainer> trainerJoin = root.join("trainer");
-        Join<Trainer, User> trainerUserJoin = trainerJoin.join("user"); // Join to User for Trainer
+        Join<Trainer, User> trainerUserJoin = trainerJoin.join("user");
         Join<Training, Trainee> traineeJoin = root.join("trainee");
-        Join<Trainee, User> traineeUserJoin = traineeJoin.join("user"); // Join to User for Trainee
+        Join<Trainee, User> traineeUserJoin = traineeJoin.join("user");
 
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(cb.equal(trainerUserJoin.get("username"), username)); // Access username from User
+        predicates.add(cb.equal(trainerUserJoin.get("username"), username));
 
         if (fromDate != null) {
             predicates.add(cb.greaterThanOrEqualTo(root.get("trainingDateTime"), fromDate));

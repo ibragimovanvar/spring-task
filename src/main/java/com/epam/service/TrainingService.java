@@ -1,7 +1,6 @@
-package com.epam.service.interfaces;
+package com.epam.service;
 
 import com.epam.domain.Training;
-import com.epam.service.generic.GenericInterface;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

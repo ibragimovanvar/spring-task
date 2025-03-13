@@ -1,6 +1,6 @@
-package com.epam.dao;
+package com.epam.dao.impl;
 
-import com.epam.dao.interfaces.TrainingDao;
+import com.epam.dao.TrainingDao;
 import com.epam.domain.Training;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -20,9 +20,9 @@ public class TrainingDaoImpl implements TrainingDao {
     @Override
     public Training save(Training training) {
         if (training.getId() == null) {
-            entityManager.persist(training); // New entity
+            entityManager.persist(training);
         } else {
-            training = entityManager.merge(training); // Existing detached entity
+            training = entityManager.merge(training);
         }
         return training;
     }

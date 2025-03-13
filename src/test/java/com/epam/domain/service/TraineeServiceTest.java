@@ -1,12 +1,12 @@
 package com.epam.domain.service;
 
 import com.epam.config.storage.TraineeStorageInitializer;
-import com.epam.dao.interfaces.TraineeDao;
+import com.epam.dao.TraineeDao;
 import com.epam.domain.Trainee;
 import com.epam.domain.Trainer;
 import com.epam.domain.Training;
 import com.epam.domain.User;
-import com.epam.service.TraineeServiceImpl;
+import com.epam.service.impl.TraineeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

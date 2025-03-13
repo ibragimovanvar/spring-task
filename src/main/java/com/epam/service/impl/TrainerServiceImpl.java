@@ -1,19 +1,14 @@
-package com.epam.service;
+package com.epam.service.impl;
 
-import com.epam.config.storage.TrainerStorageInitializer;
-import com.epam.dao.TrainerDaoImpl;
-import com.epam.dao.interfaces.TrainerDao;
+import com.epam.dao.TrainerDao;
 import com.epam.domain.Trainer;
 import com.epam.domain.Training;
 import com.epam.domain.TrainingType;
 import com.epam.domain.User;
-import com.epam.service.interfaces.TrainerService;
+import com.epam.service.TrainerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,27 +16,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
-@Transactional(readOnly = true)
+@Transactional
 @Service("trainerService")
 public class TrainerServiceImpl implements TrainerService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TrainerServiceImpl.class);
     private static final String ENTITY_NAME = "Trainer";
     private final TrainerDao trainerDao;
-    private final TrainerStorageInitializer storageInitializer;
 
     @Autowired
-    public TrainerServiceImpl(TrainerDao trainerDao, TrainerStorageInitializer storageInitializer) {
+    public TrainerServiceImpl(TrainerDao trainerDao) {
         LOGGER.info("{}Service Bean initialized", ENTITY_NAME);
         this.trainerDao = trainerDao;
-        this.storageInitializer = storageInitializer;
-    }
-
-    @Order(3)
-    @EventListener(ContextRefreshedEvent.class)
-    public void initTrainer() {
-        LOGGER.info("Saving CSVs to entity: {}", ENTITY_NAME);
-        List<Trainer> trainerList = storageInitializer.initStorage();
-        trainerList.forEach(this::createTrainer);
     }
 
     @Transactional

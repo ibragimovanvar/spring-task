@@ -1,19 +1,14 @@
-package com.epam.service;
+package com.epam.service.impl;
 
-import com.epam.config.storage.TraineeStorageInitializer;
-import com.epam.dao.TraineeDaoImpl;
-import com.epam.dao.interfaces.TraineeDao;
+import com.epam.dao.TraineeDao;
 import com.epam.domain.Trainee;
 import com.epam.domain.Trainer;
 import com.epam.domain.Training;
 import com.epam.domain.User;
-import com.epam.service.interfaces.TraineeService;
+import com.epam.service.TraineeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,24 +23,15 @@ public class TraineeServiceImpl implements TraineeService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TraineeServiceImpl.class);
     private static final String ENTITY_NAME = "Trainee";
     private final TraineeDao traineeDao;
-    private final TraineeStorageInitializer storageInitializer;
 
     @Autowired
-    public TraineeServiceImpl(TraineeDao traineeDao, TraineeStorageInitializer storageInitializer) {
+    public TraineeServiceImpl(TraineeDao traineeDao) {
         LOGGER.info("{}Service Bean initialized", ENTITY_NAME);
         this.traineeDao = traineeDao;
-        this.storageInitializer = storageInitializer;
-    }
-
-    @Order(2)
-    @EventListener(ContextRefreshedEvent.class)
-    public void initTrainee() {
-        LOGGER.info("Saving CSVs to entity: {}", ENTITY_NAME);
-        List<Trainee> traineeList = storageInitializer.initStorage();
-        traineeList.forEach(this::createTrainee);
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Trainee createProfile(String firstName, String lastName, LocalDate birthDate, String address) {
         LOGGER.info("Request to create {} profile with data: firstName={}, lastName={}, birthDate={}, address={}",
                 ENTITY_NAME, firstName, lastName, birthDate, address);
@@ -57,7 +43,8 @@ public class TraineeServiceImpl implements TraineeService {
         return traineeDao.save(trainee);
     }
 
-    private Trainee createTrainee(Trainee trainee) {
+    @Transactional(readOnly = false)
+    public Trainee createTrainee(Trainee trainee) {
         trainee.getUser().setUsername(generateUsername(trainee.getUser().getFirstName(), trainee.getUser().getLastName()));
         trainee.getUser().setPassword(generatePassword());
         return traineeDao.save(trainee);

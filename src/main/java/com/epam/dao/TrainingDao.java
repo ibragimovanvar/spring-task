@@ -1,4 +1,4 @@
-package com.epam.dao.interfaces;
+package com.epam.dao;
 
 import com.epam.domain.Training;
 import org.springframework.stereotype.Repository;

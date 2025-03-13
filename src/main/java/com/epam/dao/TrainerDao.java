@@ -1,4 +1,4 @@
-package com.epam.dao.interfaces;
+package com.epam.dao;
 
 import com.epam.domain.Trainer;
 import com.epam.domain.Training;

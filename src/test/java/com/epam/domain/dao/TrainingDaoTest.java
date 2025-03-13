@@ -1,6 +1,6 @@
 package com.epam.domain.dao;
 
-import com.epam.dao.TrainingDaoImpl;
+import com.epam.dao.impl.TrainingDaoImpl;
 import com.epam.domain.Training;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;

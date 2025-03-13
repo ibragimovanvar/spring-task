@@ -1,6 +1,6 @@
 package com.epam.domain.dao;
 
-import com.epam.dao.TrainerDaoImpl;
+import com.epam.dao.impl.TrainerDaoImpl;
 import com.epam.domain.Trainer;
 import com.epam.domain.User;
 import jakarta.persistence.EntityManager;

@@ -1,12 +1,12 @@
-package com.epam.dao;
+package com.epam.dao.impl;
 
-import com.epam.dao.interfaces.TraineeDao;
+import com.epam.dao.TraineeDao;
 import com.epam.domain.*;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.*;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -22,6 +22,7 @@ public class TraineeDaoImpl implements TraineeDao {
     private EntityManager entityManager;
 
     @Override
+    @Transactional(readOnly = false)
     public Trainee save(Trainee trainee) {
         trainee.getUser().setRole("ROLE_TRAINEE");
         entityManager.persist(trainee);
@@ -52,6 +53,7 @@ public class TraineeDaoImpl implements TraineeDao {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public void deleteByUsername(String username) {
         entityManager.createNativeQuery(
                 "DELETE FROM trainings WHERE trainee_id IN (SELECT t.user_id FROM trainees t JOIN app_users u ON t.user_id = u.id WHERE u.username = ?)"
@@ -90,13 +92,13 @@ public class TraineeDaoImpl implements TraineeDao {
         CriteriaQuery<Training> cq = cb.createQuery(Training.class);
         Root<Training> root = cq.from(Training.class);
         Join<Training, Trainee> traineeJoin = root.join("trainee");
-        Join<Trainee, User> traineeUserJoin = traineeJoin.join("user"); // Join to User
+        Join<Trainee, User> traineeUserJoin = traineeJoin.join("user");
         Join<Training, Trainer> trainerJoin = root.join("trainer");
-        Join<Trainer, User> trainerUserJoin = trainerJoin.join("user"); // Join to User
+        Join<Trainer, User> trainerUserJoin = trainerJoin.join("user");
         Join<Training, TrainingType> typeJoin = root.join("trainingType");
 
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(cb.equal(traineeUserJoin.get("username"), username)); // Access username from User
+        predicates.add(cb.equal(traineeUserJoin.get("username"), username));
 
         if (fromDate != null) {
             predicates.add(cb.greaterThanOrEqualTo(root.get("trainingDateTime"), fromDate));
@@ -105,7 +107,7 @@ public class TraineeDaoImpl implements TraineeDao {
             predicates.add(cb.lessThanOrEqualTo(root.get("trainingDateTime"), toDate));
         }
         if (trainerName != null && !trainerName.isEmpty()) {
-            predicates.add(cb.like(cb.lower(trainerUserJoin.get("firstName")), "%" + trainerName.toLowerCase() + "%")); // Access firstName from User
+            predicates.add(cb.like(cb.lower(trainerUserJoin.get("firstName")), "%" + trainerName.toLowerCase() + "%"));
         }
         if (trainingType != null && !trainingType.isEmpty()) {
             predicates.add(cb.equal(typeJoin.get("trainingTypeName"), trainingType));

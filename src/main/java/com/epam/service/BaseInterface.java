@@ -1,6 +1,6 @@
-package com.epam.service.generic;
+package com.epam.service;
 
-public interface GenericInterface<T> {
+public interface BaseInterface<T> {
     boolean authenticate(String username, String password);
     T getProfile(String username);
     void updatePassword(String username, String newPassword);

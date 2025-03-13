@@ -4,9 +4,9 @@ import com.epam.domain.Trainee;
 import com.epam.domain.Trainer;
 import com.epam.domain.Training;
 import com.epam.domain.TrainingType;
-import com.epam.service.TraineeServiceImpl;
-import com.epam.service.TrainerServiceImpl;
-import com.epam.service.TrainingServiceImpl;
+import com.epam.service.impl.TraineeServiceImpl;
+import com.epam.service.impl.TrainerServiceImpl;
+import com.epam.service.impl.TrainingServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -26,7 +26,6 @@ public class ApplicationRunner {
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext("com.epam");
         LOGGER.info("Bean definitions: {}", Arrays.toString(applicationContext.getBeanDefinitionNames()));
 
-        // Get services
         TraineeServiceImpl traineeService = applicationContext.getBean("traineeService", TraineeServiceImpl.class);
         TrainerServiceImpl trainerService = applicationContext.getBean("trainerService", TrainerServiceImpl.class);
         TrainingServiceImpl trainingService = applicationContext.getBean("trainingService", TrainingServiceImpl.class);
@@ -76,8 +75,8 @@ public class ApplicationRunner {
                     trainee.getUser().getUsername(),
                     LocalDateTime.now().minusDays(1),
                     LocalDateTime.now().plusDays(1),
-                    "John",
-                    "Strength"
+                    "Sirojiddin",
+                    "Data Structures"
             );
             LOGGER.info("Trainee trainings: {}", traineeTrainings.size());
 
@@ -86,7 +85,7 @@ public class ApplicationRunner {
                     trainer.getUser().getUsername(),
                     LocalDateTime.now().minusDays(1),
                     LocalDateTime.now().plusDays(1),
-                    "Jane"
+                    "Anvar"
             );
             LOGGER.info("Trainer trainings: {}", trainerTrainings.size());
 

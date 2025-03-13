@@ -1,14 +1,14 @@
 package com.epam.domain.service;
 
 import com.epam.config.storage.TrainingStorageInitializer;
-import com.epam.dao.interfaces.TraineeDao;
-import com.epam.dao.interfaces.TrainerDao;
-import com.epam.dao.interfaces.TrainingDao;
+import com.epam.dao.TraineeDao;
+import com.epam.dao.TrainerDao;
+import com.epam.dao.TrainingDao;
 import com.epam.domain.Trainee;
 import com.epam.domain.Trainer;
 import com.epam.domain.Training;
 import com.epam.domain.User;
-import com.epam.service.TrainingServiceImpl;
+import com.epam.service.impl.TrainingServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;

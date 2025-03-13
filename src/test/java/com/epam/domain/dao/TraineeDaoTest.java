@@ -1,6 +1,6 @@
 package com.epam.domain.dao;
 
-import com.epam.dao.TraineeDaoImpl;
+import com.epam.dao.impl.TraineeDaoImpl;
 import com.epam.domain.Trainee;
 import com.epam.domain.Trainer;
 import com.epam.domain.Training;

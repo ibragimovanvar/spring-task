@@ -1,29 +1,22 @@
-package com.epam.service;
+package com.epam.service.impl;
 
-import com.epam.config.storage.TrainingStorageInitializer;
-import com.epam.dao.TraineeDaoImpl;
-import com.epam.dao.TrainerDaoImpl;
-import com.epam.dao.TrainingDaoImpl;
-import com.epam.dao.interfaces.TraineeDao;
-import com.epam.dao.interfaces.TrainerDao;
-import com.epam.dao.interfaces.TrainingDao;
+import com.epam.dao.TraineeDao;
+import com.epam.dao.TrainerDao;
+import com.epam.dao.TrainingDao;
 import com.epam.domain.Trainee;
 import com.epam.domain.Trainer;
 import com.epam.domain.Training;
-import com.epam.service.interfaces.TrainingService;
+import com.epam.service.TrainingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Transactional(readOnly = true)
+@Transactional
 @Service("trainingService")
 public class TrainingServiceImpl implements TrainingService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TrainingServiceImpl.class);
@@ -32,23 +25,13 @@ public class TrainingServiceImpl implements TrainingService {
     private final TrainingDao trainingDao;
     private final TraineeDao traineeDao;
     private final TrainerDao trainerDao;
-    private final TrainingStorageInitializer trainingStorageInitializer;
 
     @Autowired
-    public TrainingServiceImpl(TrainingStorageInitializer trainingStorageInitializer, TrainingDao trainingDao, TraineeDao traineeDao, TrainerDao trainerDao) {
+    public TrainingServiceImpl(TrainingDao trainingDao, TraineeDao traineeDao, TrainerDao trainerDao) {
         LOGGER.info("{}Service Bean initialized", ENTITY_NAME);
         this.trainingDao = trainingDao;
         this.traineeDao = traineeDao;
         this.trainerDao = trainerDao;
-        this.trainingStorageInitializer = trainingStorageInitializer;
-    }
-
-    @Order(4)
-    @EventListener(ContextRefreshedEvent.class)
-    public void initTrainer() {
-        LOGGER.info("Saving CSVs to entity: {}", ENTITY_NAME);
-        List<Training> trainingList = trainingStorageInitializer.initStorage();
-        trainingList.forEach(this::addTraining);
     }
 
     @Override
